@@ -23,6 +23,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
         .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
 var app = builder.Build();
+app.MapGet("/", () => "Hello world!!");
 app.UseCors(c => c.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 
 if (app.Environment.IsDevelopment())

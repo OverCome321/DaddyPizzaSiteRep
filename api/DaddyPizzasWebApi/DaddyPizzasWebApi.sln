@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.8.34525.116
+VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DaddyPizzasWebApi", "DaddyPizzasWebApi\DaddyPizzasWebApi.csproj", "{5D3C6AEF-3D99-472F-8280-20D3DA1F032B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DaddyPizzasWebApi", "DaddyPizzasWebApi\DaddyPizzasWebApi.csproj", "{BF8E6731-3470-4E60-9708-F50FC2991FBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5D3C6AEF-3D99-472F-8280-20D3DA1F032B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D3C6AEF-3D99-472F-8280-20D3DA1F032B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D3C6AEF-3D99-472F-8280-20D3DA1F032B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D3C6AEF-3D99-472F-8280-20D3DA1F032B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF8E6731-3470-4E60-9708-F50FC2991FBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF8E6731-3470-4E60-9708-F50FC2991FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF8E6731-3470-4E60-9708-F50FC2991FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF8E6731-3470-4E60-9708-F50FC2991FBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5026F257-F13F-42AE-BF81-DE5F880975C9}
+		SolutionGuid = {1624B579-39DD-484A-AECD-F6EAE0B53F38}
 	EndGlobalSection
 EndGlobal
