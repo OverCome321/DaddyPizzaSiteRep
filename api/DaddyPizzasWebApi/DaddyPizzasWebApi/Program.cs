@@ -13,9 +13,20 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configure EF Core with MSSQL
+// Determine which connection string to use based on the machine name
+string computerName = Environment.MachineName;
+string connectionString = computerName switch
+{
+    "DESKTOP-RE0M47N" => builder.Configuration.GetConnectionString("ConnectionIgor"),
+    "DESKTOP2934-16" => builder.Configuration.GetConnectionString("ConnectionNikita"),
+    "DESKTOP-CN0JML6" => builder.Configuration.GetConnectionString("ConnectionArtem"),
+    "SUPER-PC" => builder.Configuration.GetConnectionString("ConnectionArkadiy"),
+    _ => throw new Exception("Unknown machine name")
+};
+
+// Configure EF Core with the appropriate connection string
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
 // Json Serializer
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
@@ -23,7 +34,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
         .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
 var app = builder.Build();
-app.MapGet("/", () => "Hello world!!");
+app.MapGet("/", () => "Hello world!");
 app.UseCors(c => c.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 
 if (app.Environment.IsDevelopment())
