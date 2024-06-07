@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import PizzaList from './PizzaList';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginStatus, setLoginStatus] = useState('');
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         try {
@@ -14,7 +16,7 @@ function Login() {
             if (isAuthenticated) {
                 // Вход выполнен успешно
                 setLoginStatus('User found');
-                
+                navigate('/PizzaList');
             } else {
                 // Ошибка входа, логин и/или пароль неверные
                 setLoginStatus('Invalid email or password');
