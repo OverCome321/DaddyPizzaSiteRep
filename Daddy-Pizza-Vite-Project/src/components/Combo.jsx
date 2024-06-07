@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import './PizzaList.css'; // Подключаем файл стилей
 
-function PizzaList() {
-    const [pizzas, setPizzas] = useState([]);
+function Combo() {
+    const [combos, setPizzas] = useState([]);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:5002/api/pizzas')
+        fetch('http://localhost:5002/api/combos')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -25,15 +25,15 @@ function PizzaList() {
 
     return (
         <div className="pizza-list-container">
-            <h1 className="pizza-list-title">Pizza List</h1>
+            <h1 className="pizza-list-title">Combo List</h1>
             {error ? (
                 <p className="error-message">{error}</p>
             ) : (
                 <ul className="pizza-list">
-                    {pizzas.map(pizza => (
-                        <li key={pizza.id} className="pizza-item">
-                            <span className="pizza-name">{pizza.name}</span>
-                            <span className="pizza-price">${pizza.price.toFixed(2)}</span>
+                    {combos.map(combo => (
+                        <li key={combo.id} className="pizza-item">
+                            <span className="pizza-name">{combo.name}</span>
+                            <span className="pizza-price">${combo.price.toFixed(2)}</span>
                         </li>
                     ))}
                 </ul>
@@ -42,4 +42,4 @@ function PizzaList() {
     );
 }
 
-export default PizzaList;
+export default Combo;

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import PizzaList from './PizzaList';
 import { useNavigate } from 'react-router-dom';
-
+import './Login.css'; // Подключаем файл стилей
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -16,7 +15,7 @@ function Login() {
             if (isAuthenticated) {
                 // Вход выполнен успешно
                 setLoginStatus('User found');
-                navigate('/PizzaList');
+                navigate('/Home');
             } else {
                 // Ошибка входа, логин и/или пароль неверные
                 setLoginStatus('Invalid email or password');
@@ -28,12 +27,26 @@ function Login() {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
-            <button onClick={handleLogin}>Login</button>
-            {loginStatus && <p>{loginStatus}</p>}
+        <div className="login-container">
+            <h2 className="login-title">Login</h2>
+            <div className="login-form">
+                <input 
+                    type="email" 
+                    value={email} 
+                    onChange={e => setEmail(e.target.value)} 
+                    placeholder="Email" 
+                    className="login-input"
+                />
+                <input 
+                    type="password" 
+                    value={password} 
+                    onChange={e => setPassword(e.target.value)} 
+                    placeholder="Password" 
+                    className="login-input"
+                />
+                <button onClick={handleLogin} className="login-button">Login</button>
+            </div>
+            {loginStatus && <p className="login-status">{loginStatus}</p>}
         </div>
     );
 }
