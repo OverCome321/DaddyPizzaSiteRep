@@ -13,8 +13,23 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Determine which connection string to use based on the machine name
-string computerName = Environment.MachineName;
+// Get the computer name from Environment.MachineName or the environment variable
+string computerName;
+try
+{
+    computerName = Environment.MachineName;
+}
+catch
+{
+    // If unable to get the machine name, try to get the COMPUTER_NAME environment variable
+    computerName = Environment.GetEnvironmentVariable("COMPUTER_NAME");
+
+    if (string.IsNullOrEmpty(computerName))
+    {
+        throw new Exception("COMPUTER_NAME environment variable is not set.");
+    }
+}
+
 string connectionString = computerName switch
 {
     "DESKTOP-RE0M47N" => builder.Configuration.GetConnectionString("ConnectionIgor"),

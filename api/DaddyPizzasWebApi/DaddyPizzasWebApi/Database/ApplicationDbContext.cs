@@ -21,6 +21,9 @@ namespace DaddyPizzasWebApi.DataBase
         public DbSet<Combos> Combos { get; set; }
         public DbSet<ComboItems> ComboItems { get; set; }
         public DbSet<OrderCombos> OrderCombos { get; set; }
+        public DbSet<Baskets> Baskets { get; set; }
+        public DbSet<BasketItemsPizzas> BasketItemsPizzas { get; set; }
+        public DbSet<BasketItemsCombos> BasketItemsCombos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

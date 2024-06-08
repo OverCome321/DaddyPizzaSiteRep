@@ -47,21 +47,27 @@ namespace DaddyPizzasWebApi.Controllers
 
             return user;
         }
-
         [HttpPost]
         public async Task<ActionResult<Users>> PostUser(Users user)
         {
             if (_context.Users.Any(u => u.email == user.email))
             {
-                return BadRequest("Email already exists.");
+                return BadRequest("Пользователь с таким email уже существует.");
             }
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.password);
             user.password = hashedPassword;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-
+            var basket = new Baskets
+            {
+                id = user.id, 
+                createDate = DateTime.UtcNow
+            };
+            _context.Baskets.Add(basket);
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetUser", new { id = user.id }, user);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, Users user)
@@ -95,6 +101,26 @@ namespace DaddyPizzasWebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
+            var BasketId = await _context.Baskets.FindAsync(id);
+            if (BasketId == null) return NotFound();
+
+            var itemsToRemovePizzas = _context.BasketItemsPizzas.Where(x => x.idBasket == BasketId.id).ToList();
+            if (itemsToRemovePizzas.Any())
+            {
+                _context.BasketItemsPizzas.RemoveRange(itemsToRemovePizzas);
+                await _context.SaveChangesAsync();
+            }
+
+            var itemsToRemoveComboes = _context.BasketItemsCombos.Where(x => x.idBasket == BasketId.id).ToList();
+            if (itemsToRemoveComboes.Any())
+            {
+                _context.BasketItemsCombos.RemoveRange(itemsToRemoveComboes);
+                await _context.SaveChangesAsync();
+            }
+
+            _context.Baskets.Remove(BasketId);
+            await _context.SaveChangesAsync();
+            
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
