@@ -12,7 +12,7 @@ function App() {
         <div>
         <nav>
         <ul>
-            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/">Login</Link></li>
             <li><Link to="/Home">Home</Link></li>
             <li><Link to="/PizzaList">PizzaList</Link></li>
             <li><Link to="/ComboList">ComboList</Link></li>
@@ -21,7 +21,7 @@ function App() {
         
         <Routes>
         <Route path="/Home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/PizzaList" element={<PizzaList />} />
         <Route path="/ComboList" element={<Combo />} />
 
