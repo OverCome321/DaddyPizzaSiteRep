@@ -7,30 +7,6 @@ import PizzaList from './components/PizzaList';
 import Combo from './components/Combo';
 
 function App() {
-<<<<<<< Updated upstream
-    return (
-      <Router>
-        <div>
-        <nav>
-        <ul>
-            <li><Link to="/">Login</Link></li>
-            <li><Link to="/Home">Home</Link></li>
-            <li><Link to="/PizzaList">PizzaList</Link></li>
-            <li><Link to="/ComboList">ComboList</Link></li>
-          </ul>
-        </nav>
-        
-        <Routes>
-        <Route path="/Home" element={<Home />} />
-        <Route path="/" element={<Login />} />
-        <Route path="/PizzaList" element={<PizzaList />} />
-        <Route path="/ComboList" element={<Combo />} />
-
-        </Routes>
-        </div>
-        </Router>
-    );
-=======
   return (
     <Router>
       <Routes>
@@ -43,7 +19,6 @@ function App() {
       </Routes>
     </Router>
   );
->>>>>>> Stashed changes
 }
 
 export default App;
