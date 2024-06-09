@@ -2,6 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using DaddyPizzasWebApi.DataBase;
 using DaddyPizzasWebApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace DaddyPizzasWebApi.Controllers
 {
@@ -10,7 +14,7 @@ namespace DaddyPizzasWebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
+        private readonly string _jwtSecret = "user_secret_key_will_be_generate";
         public UsersController(ApplicationDbContext context)
         {
             _context = context;
@@ -48,27 +52,29 @@ namespace DaddyPizzasWebApi.Controllers
             return user;
         }
         [HttpPost]
-        public async Task<ActionResult<Users>> PostUser(Users user)
+        public async Task<ActionResult<Users>> RegisterPostQuerry(Users user)
         {
             if (_context.Users.Any(u => u.email == user.email))
             {
                 return BadRequest("Пользователь с таким email уже существует.");
             }
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.password);
-            user.password = hashedPassword;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            var basket = new Baskets
+
+            try
             {
-                id = user.id, 
-                createDate = DateTime.UtcNow
-            };
-            _context.Baskets.Add(basket);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetUser", new { id = user.id }, user);
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.password);
+                user.password = hashedPassword;
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
+                var token = GenerateJwtToken(user);
+
+                return Ok(new { user, token });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ошибка при регистрации: {ex.Message}");
+            }
         }
-
-
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, Users user)
         {
@@ -150,8 +156,28 @@ namespace DaddyPizzasWebApi.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
 
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.password)) return Ok(true);
-            else return NotFound(false);
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.password))
+            {
+                var token = GenerateJwtToken(user);
+                return Ok(new { user, token });
+            }
+            else return NotFound("Неверный email или пароль.");
+        }
+        private string GenerateJwtToken(Users user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSecret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.email),
+                }),
+                Expires = DateTime.UtcNow.AddDays(7), 
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }

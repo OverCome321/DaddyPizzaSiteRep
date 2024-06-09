@@ -9,11 +9,9 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(8080);
 });
 
-// Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Get the computer name from Environment.MachineName or the environment variable
 string computerName;
 try
 {
@@ -21,7 +19,6 @@ try
 }
 catch
 {
-    // If unable to get the machine name, try to get the COMPUTER_NAME environment variable
     computerName = Environment.GetEnvironmentVariable("COMPUTER_NAME");
 
     if (string.IsNullOrEmpty(computerName))

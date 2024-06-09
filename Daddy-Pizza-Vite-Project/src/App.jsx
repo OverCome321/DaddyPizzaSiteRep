@@ -1,12 +1,13 @@
-// App.jsx
 import React from 'react';
-import Login from './components/Login'; 
-import PizzaList from './components/PizzaList';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Login from './components/Auth/Login'; 
+import Register from './components/Auth/Register';
 import Home from './components/Home';
+import PizzaList from './components/PizzaList';
 import Combo from './components/Combo';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 function App() {
+<<<<<<< Updated upstream
     return (
       <Router>
         <div>
@@ -29,6 +30,20 @@ function App() {
         </div>
         </Router>
     );
+=======
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/pizzalist" element={<PizzaList />} />
+        <Route path="/combolist" element={<Combo />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
+  );
+>>>>>>> Stashed changes
 }
 
 export default App;
