@@ -12,19 +12,11 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-string computerName;
-try
-{
-    computerName = Environment.MachineName;
-}
-catch
-{
-    computerName = Environment.GetEnvironmentVariable("COMPUTER_NAME");
+string computerName = Environment.GetEnvironmentVariable("COMPUTER_NAME") ?? Environment.MachineName;
 
-    if (string.IsNullOrEmpty(computerName))
-    {
-        throw new Exception("COMPUTER_NAME environment variable is not set.");
-    }
+if (string.IsNullOrEmpty(computerName))
+{
+    throw new Exception("COMPUTER_NAME environment variable is not set.");
 }
 
 string connectionString = computerName switch

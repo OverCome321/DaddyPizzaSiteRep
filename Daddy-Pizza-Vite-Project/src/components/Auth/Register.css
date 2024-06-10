@@ -81,18 +81,18 @@ button[disabled] {
   cursor: not-allowed;
 }
 
-.login-title {
+.register-title {
   text-align: center;
 }
 
-.login-button {
+.register-button {
   width: 100%;
   background-color: darkblue;
   color: white;
   text-transform: uppercase;
 }
 
-.register-link {
+.login-link {
   width: 100%;
   background-color: transparent;
   color: darkblue;
@@ -103,11 +103,11 @@ button[disabled] {
   text-align: center;
 }
 
-.register-link:hover {
+.login-link:hover {
   color: #0056b3;
 }
 
-.login-status {
+.register-status {
   text-align: center;
   margin-top: 16px;
   font-size: 14px;

@@ -18,4 +18,5 @@ RUN dotnet publish "./DaddyPizzasWebApi.csproj" -c $BUILD_CONFIGURATION -o /app/
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV COMPUTER_NAME DESKTOP2934-16
 ENTRYPOINT ["dotnet", "DaddyPizzasWebApi.dll"]

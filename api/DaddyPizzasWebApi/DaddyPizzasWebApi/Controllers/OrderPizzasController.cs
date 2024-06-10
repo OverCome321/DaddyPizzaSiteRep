@@ -22,70 +22,60 @@ namespace DaddyPizzasWebApi.Controllers
             return await _context.OrderPizzas.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<OrderPizzas>> GetOrderPizza(int id)
+        [HttpGet("{idOrder}")]
+        public async Task<ActionResult<IEnumerable<OrderPizzas>>> GetOrderPizzasByOrderId(int idOrder)
         {
-            var orderPizza = await _context.OrderPizzas.FindAsync(id);
+            var orderPizzas = await _context.OrderPizzas
+                                            .Where(op => op.idOrder == idOrder)
+                                            .ToListAsync();
 
-            if (orderPizza == null)
+            if (orderPizzas == null)
             {
                 return NotFound();
             }
 
-            return orderPizza;
+            return orderPizzas;
         }
+
 
         [HttpPost]
         public async Task<ActionResult<OrderPizzas>> PostOrderPizza(OrderPizzas orderPizza)
         {
-            _context.OrderPizzas.Add(orderPizza);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetOrderPizza", new { id = orderPizza.id }, orderPizza);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrderPizza(int id, OrderPizzas orderPizza)
-        {
-            if (id != orderPizza.id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(orderPizza).State = EntityState.Modified;
-
             try
             {
+                _context.OrderPizzas.Add(orderPizza);
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.OrderPizzas.Any(e => e.id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
+                // Убедитесь, что маршрут и параметры указаны правильно
+                return CreatedAtAction(nameof(GetOrderPizzasByOrderId), new { idOrder = orderPizza.idOrder }, orderPizza);
+            }
+            catch (Exception ex)
+            {
+                // Логирование ошибки
+                Console.WriteLine($"Error adding pizza to order: {ex.Message}");
+                // Возвращаем ошибку сервера с сообщением
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrderPizza(int id)
+
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> DeleteOrderPizzasByOrderId(int orderId)
         {
-            var orderPizza = await _context.OrderPizzas.FindAsync(id);
-            if (orderPizza == null)
+            var orderPizzas = await _context.OrderPizzas
+                                          .Where(op => op.idOrder == orderId)
+                                          .ToListAsync();
+
+            if (orderPizzas == null || !orderPizzas.Any())
             {
                 return NotFound();
             }
 
-            _context.OrderPizzas.Remove(orderPizza);
+            _context.OrderPizzas.RemoveRange(orderPizzas);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
+
     }
 }

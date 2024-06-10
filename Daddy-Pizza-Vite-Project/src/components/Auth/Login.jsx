@@ -16,7 +16,7 @@ function Login() {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
         if (token && userId) {
-            navigate('/Home');
+            navigate('/pizzalist');
         }
     }, []);
 
@@ -27,12 +27,16 @@ function Login() {
         }
         try {
             const response = await fetch(`http://localhost:5002/api/Users/login?email=${email}&password=${password.value}`);
-            const isAuthenticated = await response.json();
-            if (isAuthenticated) {
-                localStorage.setItem('token', 'your_token_here');
-                localStorage.setItem('userId', 'user_id_here');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+            const data = await response.json();
+            if (data && data.user && data.token) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userId', data.user.id);
                 setLoginStatus('Пользователь найден');
-                navigate('/Home');
+                navigate('/pizzalist');
             } else {
                 setLoginStatus('Неверный пароль или почта.');
             }
@@ -49,7 +53,7 @@ function Login() {
             <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
                 <fieldset>
                     <h2 className="login-title">Вход</h2>
-                    <div className="Field">
+                    <div className="Field">  
                         <label>Электронная почта <sup>*</sup></label>
                         <input 
                             type="email" 
@@ -72,7 +76,7 @@ function Login() {
                         {password.isTouched && password.value.length < 8 && <PasswordErrorMessage />}
                     </div>
                     <button type="submit" className="login-button" disabled={!isFormValid()}>Войти</button>
-                    <button type="button" onClick={() => navigate('/Register')} className="register-link">Нет аккаунта? Создайте его</button>
+                    <button type="button" onClick={() => navigate('/register')} className="register-link">Нет аккаунта? Создайте его</button>
                     {loginStatus && <p className="login-status">{loginStatus}</p>}
                 </fieldset>
             </form>

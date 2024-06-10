@@ -55,7 +55,7 @@ CREATE TABLE PizzasToppings
 (
     id INT PRIMARY KEY IDENTITY,
     idPizza INT FOREIGN KEY REFERENCES Pizzas(id),
-    idToppings INT FOREIGN KEY REFERENCES Toppings(id)
+    idTopping INT FOREIGN KEY REFERENCES Toppings(id)
 )
 GO
 
@@ -160,3 +160,56 @@ VALUES
 ('Двойной цыпленок', 'Большая', 500, 'Цыпленок, моцарелла, фирменный соус альфредо', 1, GETDATE()),
 ('Ветчина и сыр', 'Маленькая', 300, 'Ветчина, моцарелла, фирменный соус альфредо', 4, GETDATE());
 GO
+-- Заполнение таблицы Toppings
+INSERT INTO Toppings (name, weight, createDate)
+VALUES 
+('Пикантная пепперони', '50 г', GETDATE()), 
+('Цыпленок', '100 г', GETDATE()), 
+('Ветчина', '70 г', GETDATE()), 
+('Моцарелла', '120 г', GETDATE()), 
+('Сыры чеддер и пармезан', '80 г', GETDATE()), 
+('Острые колбаски чоризо', '60 г', GETDATE());
+
+-- Заполнение таблицы Combos
+INSERT INTO Combos (name, desription, createDate, price, idCategory)
+VALUES 
+('Семейная пицца', 'Большая пицца на выбор + 2 л бесплатного напитка', GETDATE(), 850, 1),
+('Комбо "Четыре сыра"', '2 средние пиццы на выбор + 2 лимонада + салат на выбор', GETDATE(), 1200, 2);
+
+-- Заполнение таблицы ComboItems
+INSERT INTO ComboItems (idCombo, idPizza)
+VALUES 
+(1, 1),
+(1, 2),
+(2, 3),
+(2, 4);
+
+-- Заполнение таблицы Users
+INSERT INTO Users (email, password, idRole, adress, createDate)
+VALUES 
+('user1@example.com', 'password1', 1, 'г. Москва, ул. Пушкина, д. 10, кв. 5', GETDATE()), 
+('admin@example.com', 'adminpassword', 2, 'г. Санкт-Петербург, ул. Ленина, д. 15', GETDATE());
+
+-- Заполнение таблицы Baskets
+INSERT INTO Baskets (id, createDate)
+VALUES 
+(1, GETDATE()),
+(2, GETDATE());
+
+-- Заполнение таблицы BasketItemsPizzas
+INSERT INTO BasketItemsPizzas (idBasket, idPizza, count)
+VALUES 
+(1, 1, 2),
+(1, 3, 1),
+(2, 2, 1),
+(2, 4, 3);
+select * from OrderPizzas
+select * from Orders
+select * from Pizzas
+select * from PizzasToppings
+select * from BasketItemsPizzas
+select * from Users
+update BasketItemsPizzas set idBasket = 3 WHERE idBasket = 2
+
+select * from Baskets
+insert into Baskets VALUES (3,GETDATE())

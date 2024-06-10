@@ -65,6 +65,13 @@ namespace DaddyPizzasWebApi.Controllers
                 user.password = hashedPassword;
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+                var basket = new Baskets
+                {
+                    id = user.id,
+                    createDate = DateTime.Now,
+                };
+                _context.Baskets.Add(basket);
+                await _context.SaveChangesAsync();
 
                 var token = GenerateJwtToken(user);
 
@@ -114,13 +121,6 @@ namespace DaddyPizzasWebApi.Controllers
             if (itemsToRemovePizzas.Any())
             {
                 _context.BasketItemsPizzas.RemoveRange(itemsToRemovePizzas);
-                await _context.SaveChangesAsync();
-            }
-
-            var itemsToRemoveComboes = _context.BasketItemsCombos.Where(x => x.idBasket == BasketId.id).ToList();
-            if (itemsToRemoveComboes.Any())
-            {
-                _context.BasketItemsCombos.RemoveRange(itemsToRemoveComboes);
                 await _context.SaveChangesAsync();
             }
 

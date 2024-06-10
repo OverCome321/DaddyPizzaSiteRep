@@ -21,18 +21,20 @@ namespace DaddyPizzasWebApi.Controllers
         {
             return await _context.PizzasToppings.ToListAsync();
         }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PizzasToppings>> GetPizzasTopping(int id)
+        [HttpGet("toppings-for-pizza/{id}")]
+        public async Task<ActionResult<List<ToppingDto>>> GetIdToppingsForPizza(int id)
         {
-            var pizzasTopping = await _context.PizzasToppings.FindAsync(id);
+            var toppingsIds = await _context.PizzasToppings
+                                            .Where(e => e.idPizza == id)
+                                            .Select(e => new ToppingDto { IdTopping = e.idTopping })
+                                            .ToListAsync();
 
-            if (pizzasTopping == null)
+            if (toppingsIds == null || !toppingsIds.Any())
             {
                 return NotFound();
             }
 
-            return pizzasTopping;
+            return toppingsIds;
         }
 
         [HttpPost]

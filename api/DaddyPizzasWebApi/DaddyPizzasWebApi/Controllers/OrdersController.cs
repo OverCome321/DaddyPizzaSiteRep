@@ -34,7 +34,20 @@ namespace DaddyPizzasWebApi.Controllers
 
             return order;
         }
+        [HttpGet("user/{idUser}")]
+        public async Task<ActionResult<IEnumerable<Orders>>> GetOrdersByUserId(int idUser)
+        {
+            var orders = await _context.Orders
+                                       .Where(order => order.idUser == idUser)
+                                       .ToListAsync();
 
+            if (orders == null || orders.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return orders;
+        }
         [HttpPost]
         public async Task<ActionResult<Orders>> PostOrder(Orders order)
         {

@@ -41,9 +41,9 @@ function Register() {
                 body: JSON.stringify(user),
             });
             if (response.ok) {
-                // Сохранение токена и id пользователя при успешной регистрации
-                localStorage.setItem('token', 'your_token_here');
-                localStorage.setItem('userId', 'user_id_here');
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('userId', data.user.id);
                 setRegisterStatus('Аккаунт успешно зарегистрирован');
                 navigate('/home');
             } else {
@@ -116,6 +116,7 @@ function Register() {
                     </div>
                     <button type="submit" disabled={!getIsFormValid()} className="register-button">Зарегистрироваться</button>
                     {registerStatus && <p className="register-status">{registerStatus}</p>}
+                    <button type="button" onClick={() => navigate('/login')} className="login-link">Назад</button>
                 </fieldset>
             </form>
         </div>
